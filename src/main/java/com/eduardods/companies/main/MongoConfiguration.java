@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @Profile("mongo")
-@EnableMongoRepositories(basePackages = {"com.eduardods.companies.db"})
+@EnableMongoRepositories(basePackages = {"com.eduardods.companies.db.mongo"})
 public class MongoConfiguration {
 }
