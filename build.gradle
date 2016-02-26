@@ -49,8 +49,10 @@ task acceptanceTest(type: Test) {
 	testLogging.showStandardStreams = true
 }
 
-//check.dependsOn acceptanceTest
-//acceptanceTest.mustRunAfter test
+//For heroku
+task stage {
+	dependsOn build
+}
 
 dependencies {
 	runtime('org.postgresql:postgresql:9.4.1208')

@@ -1,0 +1,5 @@
+{
+  "name": "Companies API",
+  "description": "An API example that uses Spring Boot, Spring Data, Cucumber and MongoDB",
+  "image": "heroku/gradle"
+}
