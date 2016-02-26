@@ -1,0 +1,75 @@
+buildscript {
+	ext {
+		springBootVersion = '1.3.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot' 
+
+jar {
+	baseName = 'companies-service'
+	version = '0.0.1-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	acceptanceTestCompile.extendsFrom testCompile
+	acceptanceTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+	acceptanceTest {
+		java.srcDir file('src/acceptanceTest/java')
+		resources.srcDir file('src/acceptanceTest/resources')
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+	test {
+		java.srcDir file('src/test/java')
+		resources.srcDir file('src/test/resources')
+	}
+}
+
+task acceptanceTest(type: Test) {
+	testClassesDir = sourceSets.acceptanceTest.output.classesDir
+	classpath += sourceSets.acceptanceTest.runtimeClasspath
+	testLogging.showStandardStreams = true
+}
+
+//check.dependsOn acceptanceTest
+//acceptanceTest.mustRunAfter test
+
+dependencies {
+	runtime('org.postgresql:postgresql:9.4.1208')
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile('org.springframework.boot:spring-boot-starter-web')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	acceptanceTestCompile('info.cukes:cucumber-java8:1.2.4')
+	acceptanceTestCompile('info.cukes:cucumber-junit:1.2.4')
+	acceptanceTestCompile('com.jayway.restassured:rest-assured:2.8.0')
+}
+
+idea {
+	module {
+		scopes.TEST.plus += [configurations.acceptanceTestCompile]
+	}
+}
+
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.9'
+}
