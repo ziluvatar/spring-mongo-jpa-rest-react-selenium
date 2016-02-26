@@ -1,7 +1,7 @@
-CREATE SEQUENCE my_seq_gen START 1;
+CREATE SEQUENCE COMPANIES_SEQ START 1;
 
-DROP TABLE company_owners;
-DROP TABLE companies;
+DROP TABLE IF EXISTS company_owners;
+DROP TABLE IF EXISTS companies;
 
 CREATE TABLE companies (
     id         integer NOT NULL CONSTRAINT pk PRIMARY KEY,
@@ -18,5 +18,5 @@ CREATE TABLE company_owners (
   owner         VARCHAR (200)
 );
 
-DROP INDEX owners_ref_idx
+DROP INDEX IF EXISTS owners_ref_idx;
 CREATE INDEX owners_ref_idx ON company_owners (company_id);
