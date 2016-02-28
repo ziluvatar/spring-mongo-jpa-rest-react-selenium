@@ -2,7 +2,7 @@ var CompanyList = React.createClass({
   render: function() {
     var companyNodes = this.props.companies.map(function(company) {
       return (
-        <tr class="companyRow">
+        <tr className="companyRow">
           <td>{company.name}</td>
           <td>{company.address}</td>
           <td>{company.city}</td>

@@ -28,4 +28,11 @@ public class CompanyListElement {
   private List<WebElement> findCompanyRows() {
     return rootElement.findElements(By.cssSelector("table tr.companyRow"));
   }
+
+  public List<List<WebElement>> getRows() {
+    return findCompanyRows()
+      .stream()
+      .map((e) -> e.findElements(By.tagName("td")))
+      .collect(Collectors.toList());
+  }
 }
