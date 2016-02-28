@@ -1,4 +1,4 @@
-package com.eduardods.companies.ui.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
 import java.util.List;
 import java.util.function.Function;

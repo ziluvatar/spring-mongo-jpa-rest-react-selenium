@@ -1,6 +1,6 @@
-package com.eduardods.companies.rest.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getParameterFromContext;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.getParameterFromContext;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

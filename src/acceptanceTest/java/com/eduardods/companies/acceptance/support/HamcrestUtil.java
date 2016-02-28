@@ -1,4 +1,4 @@
-package com.eduardods.companies.rest.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;

@@ -1,4 +1,4 @@
-package com.eduardods.companies.rest.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
 public class FieldError {
   private String field;

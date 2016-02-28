@@ -1,4 +1,4 @@
-package com.eduardods.companies.ui.acceptance;
+package com.eduardods.companies.acceptance.ui.elements;
 
 import java.util.List;
 import java.util.stream.Collectors;

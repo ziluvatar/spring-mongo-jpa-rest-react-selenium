@@ -1,4 +1,4 @@
-package com.eduardods.companies.rest.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;

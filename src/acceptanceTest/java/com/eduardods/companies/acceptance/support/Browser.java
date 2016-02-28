@@ -1,9 +1,8 @@
-package com.eduardods.companies.ui.acceptance.support;
+package com.eduardods.companies.acceptance.support;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Browser {
 

@@ -1,7 +1,7 @@
-package com.eduardods.companies.ui.acceptance.steps;
+package com.eduardods.companies.acceptance.ui.steps;
 
-import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
-import static com.eduardods.companies.ui.acceptance.support.ListUtil.map;
+import static com.eduardods.companies.acceptance.support.Server.getBaseUri;
+import static com.eduardods.companies.acceptance.support.ListUtil.map;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.openqa.selenium.WebElement;
 
-import com.eduardods.companies.ui.acceptance.HomePage;
+import com.eduardods.companies.acceptance.ui.elements.HomePage;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 
@@ -51,17 +51,4 @@ public class CompanyListSteps {
     assertThat(actualCompanies, equalTo(expectedCompanies));
   }
 
-  @Given("This company exists")
-  public void preCreateCompany(String payload) {
-    requestTocreateCompany("/companies", ContentType.JSON.toString(), payload);
-  }
-
-  private Response requestTocreateCompany(String path, String contentType, String payload) {
-    return given()
-      .contentType(contentType)
-      .body(payload)
-      .when()
-      .post(getBaseUri() + path)
-      .andReturn();
-  }
 }

@@ -1,10 +1,10 @@
-package com.eduardods.companies.ui.acceptance;
+package com.eduardods.companies.acceptance.ui.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import com.eduardods.companies.rest.acceptance.support.Server;
-import com.eduardods.companies.ui.acceptance.support.Browser;
+import com.eduardods.companies.acceptance.support.Server;
+import com.eduardods.companies.acceptance.support.Browser;
 
 public class HomePage {
 

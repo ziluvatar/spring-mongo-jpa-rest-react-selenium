@@ -1,7 +1,7 @@
-package com.eduardods.companies.rest.acceptance.steps;
+package com.eduardods.companies.acceptance.rest.steps;
 
-import static com.eduardods.companies.rest.acceptance.support.HamcrestUtil.hasEntries;
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
+import static com.eduardods.companies.acceptance.support.HamcrestUtil.hasEntries;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.getResponseFromContext;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;

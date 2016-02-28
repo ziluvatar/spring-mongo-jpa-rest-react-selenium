@@ -1,6 +1,6 @@
-package com.eduardods.companies.rest.acceptance.steps;
+package com.eduardods.companies.acceptance.rest.steps;
 
-import com.eduardods.companies.rest.acceptance.support.Server;
+import com.eduardods.companies.acceptance.support.Server;
 
 import cucumber.api.java.Before;
 

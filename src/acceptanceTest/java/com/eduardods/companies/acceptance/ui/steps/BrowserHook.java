@@ -1,4 +1,6 @@
-package com.eduardods.companies.ui.acceptance.support;
+package com.eduardods.companies.acceptance.ui.steps;
+
+import com.eduardods.companies.acceptance.support.Browser;
 
 import cucumber.api.java.Before;
 

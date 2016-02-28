@@ -1,9 +1,9 @@
-package com.eduardods.companies.rest.acceptance.steps;
+package com.eduardods.companies.acceptance.rest.steps;
 
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveParameterInContext;
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveResponseInContext;
-import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.getResponseFromContext;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.saveParameterInContext;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.saveResponseInContext;
+import static com.eduardods.companies.acceptance.support.Server.getBaseUri;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.startsWith;
@@ -11,8 +11,8 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 
 import java.util.List;
 
-import com.eduardods.companies.rest.acceptance.support.FieldError;
-import com.eduardods.companies.rest.acceptance.support.ParameterExpression;
+import com.eduardods.companies.acceptance.support.FieldError;
+import com.eduardods.companies.acceptance.support.ParameterExpression;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 
@@ -21,12 +21,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class CreateCompanySteps {
-
-  @Given("This company exists")
-  public void preCreateCompany(String payload) {
-    saveResponseInContext(
-      requestTocreateCompany("/companies", ContentType.JSON.toString(), payload));
-  }
 
   @When("^I make a POST request to '(.*)' with content-type '(.*)' and payload:$")
   public void createCompany(ParameterExpression path, String contentType, String payload) throws Throwable {

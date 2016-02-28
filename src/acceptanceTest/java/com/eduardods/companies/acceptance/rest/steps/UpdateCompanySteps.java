@@ -1,14 +1,14 @@
-package com.eduardods.companies.rest.acceptance.steps;
+package com.eduardods.companies.acceptance.rest.steps;
 
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
-import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveResponseInContext;
-import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.getResponseFromContext;
+import static com.eduardods.companies.acceptance.support.ScenarioContext.saveResponseInContext;
+import static com.eduardods.companies.acceptance.support.Server.getBaseUri;
 import static com.jayway.restassured.RestAssured.given;
 
 import java.util.List;
 
-import com.eduardods.companies.rest.acceptance.support.HamcrestUtil;
-import com.eduardods.companies.rest.acceptance.support.ParameterExpression;
+import com.eduardods.companies.acceptance.support.HamcrestUtil;
+import com.eduardods.companies.acceptance.support.ParameterExpression;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
