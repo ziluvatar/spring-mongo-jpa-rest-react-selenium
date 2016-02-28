@@ -17,6 +17,7 @@ public class BrowserHook {
           Browser.close();
         }
       });
+      added = true;
     }
   }
 
