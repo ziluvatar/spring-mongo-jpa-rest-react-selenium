@@ -6,7 +6,7 @@ import cucumber.api.java.Before;
 
 public class StartServerHook {
 
-  private static Server server = new Server();
+  private static Server server = Server.getInstance();
 
   @Before
   public void startServer() {

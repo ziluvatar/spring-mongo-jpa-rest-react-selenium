@@ -59,10 +59,12 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-devtools")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	acceptanceTestCompile('info.cukes:cucumber-java8:1.2.4')
 	acceptanceTestCompile('info.cukes:cucumber-junit:1.2.4')
 	acceptanceTestCompile('com.jayway.restassured:rest-assured:2.8.0')
+	acceptanceTestCompile('org.seleniumhq.selenium:selenium-java:2.52.0')
 }
 
 idea {

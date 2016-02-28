@@ -3,21 +3,13 @@ package com.eduardods.companies.rest.acceptance.steps;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveParameterInContext;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveResponseInContext;
-import static com.eduardods.companies.rest.acceptance.support.Server.serverUri;
+import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
 import java.util.List;
-
-import org.springframework.http.HttpHeaders;
 
 import com.eduardods.companies.rest.acceptance.support.FieldError;
 import com.eduardods.companies.rest.acceptance.support.ParameterExpression;
@@ -47,7 +39,7 @@ public class CreateCompanySteps {
       .contentType(contentType)
       .body(payload)
     .when()
-      .post(serverUri() + path)
+      .post(getBaseUri() + path)
       .andReturn();
   }
 

@@ -2,7 +2,7 @@ package com.eduardods.companies.rest.acceptance.steps;
 
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveResponseInContext;
-import static com.eduardods.companies.rest.acceptance.support.Server.serverUri;
+import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
 import static com.jayway.restassured.RestAssured.given;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class UpdateCompanySteps {
         .contentType(contentType)
         .body(payload)
       .when()
-        .put(serverUri() + path.getValue())
+        .put(getBaseUri() + path.getValue())
         .andReturn());
   }
 

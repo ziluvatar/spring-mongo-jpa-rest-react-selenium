@@ -7,8 +7,14 @@ import com.eduardods.companies.main.Application;
 
 public class Server {
 
+  private static final Server INSTANCE = new Server();
+
   private boolean started = false;
   private ConfigurableApplicationContext app;
+
+  private Server() {}
+
+  public static Server getInstance() { return INSTANCE; }
 
   public void start() {
     app = SpringApplication.run(Application.class,
@@ -36,7 +42,7 @@ public class Server {
     return "8081";
   }
 
-  public static String serverUri() {
+  public static String getBaseUri() {
     return String.format("http://%s:%s", getHost(), getPort());
   }
 

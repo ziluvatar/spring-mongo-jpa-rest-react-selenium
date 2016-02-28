@@ -3,7 +3,7 @@ package com.eduardods.companies.rest.acceptance.steps;
 import static com.eduardods.companies.rest.acceptance.support.HamcrestUtil.hasEntries;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.getResponseFromContext;
 import static com.eduardods.companies.rest.acceptance.support.ScenarioContext.saveResponseInContext;
-import static com.eduardods.companies.rest.acceptance.support.Server.serverUri;
+import static com.eduardods.companies.rest.acceptance.support.Server.getBaseUri;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
@@ -23,7 +23,7 @@ public class ListCompanySteps {
   public void requestList(ParameterExpression path) {
     saveResponseInContext(
       given()
-        .get(serverUri() + path.getValue()));
+        .get(getBaseUri() + path.getValue()));
   }
 
   @Then("the response list contains (\\d+) companies")
