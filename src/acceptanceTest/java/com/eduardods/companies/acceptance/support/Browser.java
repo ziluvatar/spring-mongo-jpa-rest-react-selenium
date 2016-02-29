@@ -16,7 +16,7 @@ public class Browser {
   private WebDriver webDriver;
 
   private Browser() {
-    webDriver = createHtmlUnitDriver();
+    webDriver = createFirefoxWebDriver();
   }
 
   private WebDriver createFirefoxWebDriver() {
