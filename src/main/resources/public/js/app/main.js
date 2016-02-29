@@ -76,33 +76,20 @@ var CompanyForm = React.createClass({
       }.bind(this)
     });
   },
-  handleNameChanged: function (e) {
-    this.setState({ name: e.target.value });
-  },
-  handleAddressChanged: function (e) {
-    this.setState({ address: e.target.value });
-  },
-  handleCityChanged: function (e) {
-    this.setState({ city: e.target.value });
-  },
-  handleCountryChanged: function (e) {
-    this.setState({ country: e.target.value });
-  },
-  handleEmailChanged: function (e) {
-    this.setState({ email: e.target.value });
-  },
-  handlePhoneChanged: function (e) {
-    this.setState({ phone: e.target.value });
-  },
-  handleOwnersChanged: function (e) {
-    this.setState({ owners: e.target.value });
-  },
-  close() {
+  close: function() {
     this.setState({ showModal: false });
     this.props.onFinished();
   },
-  open() {
+  open: function() {
     this.setState({ showModal: true });
+  },
+  handleInputChange: function(fieldName) {
+    var self = this;
+    return function(e) {
+      var state = {};
+      state[fieldName] = e.target.value;
+      self.setState(state);
+    }
   },
   render: function() {
     return (
@@ -115,37 +102,37 @@ var CompanyForm = React.createClass({
               <div className="form-group">
                 <label htmlFor="companyFormName" className="control-label">Name (*)</label>
                 <input type="text" className="form-control" id="companyFormName" name="name"
-                       placeholder="Enter a name" value={this.state.name} onChange={this.handleNameChanged} />
+                       placeholder="Enter a name" value={this.state.name} onChange={this.handleInputChange('name')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormAddress" className="control-label">Address (*)</label>
                 <input type="text" className="form-control" id="companyFormAddress" name="address"
-                       placeholder="Enter an address" value={this.state.address} onChange={this.handleAddressChanged} />
+                       placeholder="Enter an address" value={this.state.address} onChange={this.handleInputChange('address')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormCity" className="control-label">City (*)</label>
                 <input type="text" className="form-control" id="companyFormCity" name="city"
-                       placeholder="Enter a city" value={this.state.city} onChange={this.handleCityChanged} />
+                       placeholder="Enter a city" value={this.state.city} onChange={this.handleInputChange('city')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormCountry" className="control-label">Country (*)</label>
                 <input type="text" className="form-control" id="companyFormCountry" name="country"
-                       placeholder="Enter a country" value={this.state.country} onChange={this.handleCountryChanged} />
+                       placeholder="Enter a country" value={this.state.country} onChange={this.handleInputChange('country')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormEmail" className="control-label">Email</label>
                 <input type="text" className="form-control" id="companyFormEmail" name="email"
-                       placeholder="Enter an email" value={this.state.email} onChange={this.handleEmailChanged} />
+                       placeholder="Enter an email" value={this.state.email} onChange={this.handleInputChange('email')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormPhone" className="control-label">Phone</label>
                 <input type="text" className="form-control" id="companyFormPhone" name="phone"
-                       placeholder="Enter an phone" value={this.state.phone} onChange={this.handlePhoneChanged} />
+                       placeholder="Enter an phone" value={this.state.phone} onChange={this.handleInputChange('phone')} />
               </div>
               <div className="form-group">
                 <label htmlFor="companyFormOwners" className="control-label">Owners (*)</label>
                 <input type="text" className="form-control" id="companyFormOwners" name="owners"
-                       placeholder="Enter some owners separated by comma" value={this.state.owners} onChange={this.handleOwnersChanged} />
+                       placeholder="Enter some owners separated by comma" value={this.state.owners} onChange={this.handleInputChange('owners')} />
               </div>
               <span>(*) Required field</span>
             </Modal.Body>
