@@ -1,6 +1,7 @@
 var Modal = ReactBootstrap.Modal;
 var Button = ReactBootstrap.Button;
 var ButtonInput = ReactBootstrap.ButtonInput;
+var update = React.addons.update;
 
 var CompanyList = React.createClass({
   render: function() {
@@ -38,18 +39,63 @@ var CompanyList = React.createClass({
   }
 });
 
+var FormGroup = React.createClass({
+  getErrorMessage: function(code) {
+    switch (code) {
+      case 'NotEmpty':
+        return 'This field can not be empty';
+      case 'Email':
+        return 'The email format is invalid';
+    }
+  },
+  render: function(){
+    var errorMessage, groupErrorClass;
+
+    if (this.props.error) {
+      errorMessage = <span className="help-block">{this.getErrorMessage(this.props.error)}</span>;
+      groupErrorClass = 'has-error';
+    }
+    return (
+      <div className={'form-group ' + groupErrorClass}>
+        <label htmlFor={'companyForm' + this.props.name} className="control-label">{this.props.label}</label>
+        <input type="text" className="form-control" id={'companyForm' + this.props.name} name={this.props.name}
+               placeholder={this.props.hint} value={this.props.value} onChange={this.props.onInputChange} />
+        {errorMessage}
+      </div>
+    );
+  }
+});
+
 var CompanyForm = React.createClass({
   getInitialState: function () {
     return {
       showModal: true,
-      name: '',
-      address: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
-      owners: ''
+      errors: {
+        name: '',
+        address: '',
+        city: '',
+        country: '',
+        email: '',
+        phone: '',
+        owners: ''
+      },
+      values: {
+        name: '',
+        address: '',
+        city: '',
+        country: '',
+        email: '',
+        phone: '',
+        owners: ''
+      }
     };
+  },
+  parseOwners: function (ownersString) {
+    if (ownersString) {
+      return ownersString.replace(/,\s+/g,',').split(',');
+    } else {
+      return null;
+    }
   },
   handleSubmit: function(e) {
     e.preventDefault();
@@ -59,22 +105,34 @@ var CompanyForm = React.createClass({
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({
-        name: this.state.name,
-        address: this.state.address,
-        city: this.state.city,
-        country: this.state.country,
-        email: this.state.email,
-        phone: this.state.phone,
-        owners: this.state.owners.split(",")
+        name: this.state.values.name,
+        address: this.state.values.address,
+        city: this.state.values.city,
+        country: this.state.values.country,
+        email: this.state.values.email,
+        phone: this.state.values.phone,
+        owners: this.parseOwners(this.state.values.owners)
       }),
       success: function(data) {
         this.setState(this.getInitialState());
         this.close();
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        if (xhr.status === 400) {
+          if (xhr.responseJSON.errors) {
+            this.handleErrors(xhr.responseJSON.errors);
+          }
+        }
       }.bind(this)
     });
+  },
+  handleErrors: function(errors) {
+    var i;
+    var stateErrors = {};
+    for (i = 0; i < errors.length; i++) {
+      stateErrors[errors[i].field] = errors[i].code;
+    }
+    this.setState({ errors: update(this.state.errors, { $merge: stateErrors })});
   },
   close: function() {
     this.setState({ showModal: false });
@@ -86,9 +144,15 @@ var CompanyForm = React.createClass({
   handleInputChange: function(fieldName) {
     var self = this;
     return function(e) {
-      var state = {};
-      state[fieldName] = e.target.value;
-      self.setState(state);
+      var errors = {};
+      var values = {};
+
+      values[fieldName] = e.target.value;
+      errors[fieldName] = '';
+      self.setState({
+        errors: update(self.state.errors, { $merge: errors }),
+        values: update(self.state.values, { $merge: values })
+      });
     }
   },
   render: function() {
@@ -99,41 +163,39 @@ var CompanyForm = React.createClass({
           </Modal.Header>
           <form name="companyForm" role="form" onSubmit={this.handleSubmit}>
             <Modal.Body>
-              <div className="form-group">
-                <label htmlFor="companyFormName" className="control-label">Name (*)</label>
-                <input type="text" className="form-control" id="companyFormName" name="name"
-                       placeholder="Enter a name" value={this.state.name} onChange={this.handleInputChange('name')} />
+              <FormGroup name="name" label="Name (*)" hint="Enter a name" 
+                         value={this.state.values.name} error={this.state.errors.name}
+                         onInputChange={this.handleInputChange('name')} />
+              <FormGroup name="address" label="Address (*)" hint="Enter an address"
+                         value={this.state.values.address} error={this.state.errors.address}
+                         onInputChange={this.handleInputChange('address')} />
+              <div className="row">
+                <div className="col-md-6">
+                  <FormGroup name="city" label="City (*)" hint="Enter a city"
+                             value={this.state.values.city} error={this.state.errors.city}
+                             onInputChange={this.handleInputChange('city')} />
+                </div>
+                <div className="col-md-6">
+                  <FormGroup name="country" label="Country (*)" hint="Enter a country"
+                             value={this.state.values.country} error={this.state.errors.country}
+                             onInputChange={this.handleInputChange('country')} />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="companyFormAddress" className="control-label">Address (*)</label>
-                <input type="text" className="form-control" id="companyFormAddress" name="address"
-                       placeholder="Enter an address" value={this.state.address} onChange={this.handleInputChange('address')} />
+              <div className="row">
+                <div className="col-md-6">
+                  <FormGroup name="email" label="Email" hint="Enter an email"
+                             value={this.state.values.email} error={this.state.errors.email}
+                             onInputChange={this.handleInputChange('email')} />
+                </div>
+                <div className="col-md-6">
+                  <FormGroup name="phone" label="Phone" hint="Enter an phone"
+                             value={this.state.values.phone} error={this.state.errors.phone}
+                             onInputChange={this.handleInputChange('phone')} />
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="companyFormCity" className="control-label">City (*)</label>
-                <input type="text" className="form-control" id="companyFormCity" name="city"
-                       placeholder="Enter a city" value={this.state.city} onChange={this.handleInputChange('city')} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="companyFormCountry" className="control-label">Country (*)</label>
-                <input type="text" className="form-control" id="companyFormCountry" name="country"
-                       placeholder="Enter a country" value={this.state.country} onChange={this.handleInputChange('country')} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="companyFormEmail" className="control-label">Email</label>
-                <input type="text" className="form-control" id="companyFormEmail" name="email"
-                       placeholder="Enter an email" value={this.state.email} onChange={this.handleInputChange('email')} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="companyFormPhone" className="control-label">Phone</label>
-                <input type="text" className="form-control" id="companyFormPhone" name="phone"
-                       placeholder="Enter an phone" value={this.state.phone} onChange={this.handleInputChange('phone')} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="companyFormOwners" className="control-label">Owners (*)</label>
-                <input type="text" className="form-control" id="companyFormOwners" name="owners"
-                       placeholder="Enter some owners separated by comma" value={this.state.owners} onChange={this.handleInputChange('owners')} />
-              </div>
+              <FormGroup name="owners" label="Owners (*)" hint="Enter an owners"
+                         value={this.state.values.owners} error={this.state.errors.owners}
+                         onInputChange={this.handleInputChange('owners')} />
               <span>(*) Required field</span>
             </Modal.Body>
             <Modal.Footer>
