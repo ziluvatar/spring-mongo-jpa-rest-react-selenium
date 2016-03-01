@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import com.eduardods.companies.acceptance.ui.elements.CompanyForm;
+import com.eduardods.companies.acceptance.ui.elements.FormElement;
 import com.eduardods.companies.acceptance.ui.elements.HomePage;
 
 import cucumber.api.java.en.Then;
@@ -34,7 +34,7 @@ public class CreateCompanySteps {
 
   @When("user (?:fills|modifies) and submits the company form with this information:")
   public void fillCompanyForm(Map<String, String> newCompany){
-    CompanyForm form = homePage.getCompanyForm().get();
+    FormElement form = homePage.getCompanyForm().get();
     for (Entry<String, String> dataToInput : newCompany.entrySet()) {
       form.setFieldText(dataToInput.getKey(), dataToInput.getValue());
     }
@@ -43,7 +43,7 @@ public class CreateCompanySteps {
 
   @Then("company form shows these errors for these fields:")
   public void checkFieldErrors(Map<String, String> failedCompany) {
-    CompanyForm form = homePage.getCompanyForm().get();
+    FormElement form = homePage.getCompanyForm().get();
     for (Entry<String, String> fieldAndError : failedCompany.entrySet()) {
       Optional<String> errorOptional = form.get(fieldAndError.getKey()).getErrorMessage();
 

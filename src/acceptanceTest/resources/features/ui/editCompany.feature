@@ -1,6 +1,7 @@
 Feature: Edit a company
 
   Background:
+    Given No company exists
     Given This company exists
       """
       {
@@ -43,7 +44,7 @@ Feature: Edit a company
 
   @view-edit @view-edit-company-invalid-fields
   Scenario: Try to edit a company some invalid fields
-    When user clicks on New Company button
+    When user clicks on Edit Button in row 1 button
     And user modifies and submits the company form with this information:
       | name     ||
       | owners   ||

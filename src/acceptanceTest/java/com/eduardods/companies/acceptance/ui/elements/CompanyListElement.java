@@ -46,7 +46,15 @@ public class CompanyListElement {
     }
 
     public WebElement getEditButton() {
-      return cells.get(7);
+      return getButtons().get(0);
+    }
+
+    public WebElement getAddOwnersButton() {
+      return getButtons().get(1);
+    }
+
+    private List<WebElement> getButtons() {
+      return cells.get(7).findElements(By.tagName("button"));
     }
   }
 }

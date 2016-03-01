@@ -4,34 +4,42 @@ import java.util.List;
 import java.util.Optional;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
-public class CompanyForm {
+public class FormElement {
 
   private WebElement rootElement;
 
-  public CompanyForm(WebElement rootElement) {
+  public FormElement(WebElement rootElement) {
     this.rootElement = rootElement;
   }
 
   public void setFieldText(String name, String text) {
-    rootElement.findElement(By.name(name)).clear();
+    clearFieldText(name);
     rootElement.findElement(By.name(name)).sendKeys(text);
   }
 
-  public Field get(String name) {
-    return new Field(rootElement.findElement(By.className("form-group-" + name)));
+  private void clearFieldText(String name) {
+    rootElement.findElement(By.name(name)).clear();
+    //due to issue of selenium + react (not onChange method is raised for .clear())
+    rootElement.findElement(By.name(name)).sendKeys(" ");
+    rootElement.findElement(By.name(name)).sendKeys(Keys.BACK_SPACE);
+  }
+
+  public FieldElement get(String name) {
+    return new FieldElement(rootElement.findElement(By.className("form-group-" + name)));
   }
 
   public void submit() {
     rootElement.findElement(By.className("btn-primary")).click();
   }
 
-  public static class Field {
+  public static class FieldElement {
 
     private WebElement rootElement;
 
-    public Field(WebElement rootElement) {
+    public FieldElement(WebElement rootElement) {
       this.rootElement = rootElement;
     }
 

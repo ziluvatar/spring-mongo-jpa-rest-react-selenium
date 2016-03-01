@@ -7,6 +7,9 @@ var CompanyListRow = React.createClass({
   handleEditButtonClick: function () {
     this.props.onCompanyEditButtonClick(this.props.company);
   },
+  handleAddOwnersButtonClick: function () {
+    this.props.onAddOwnersButtonClick(this.props.company);
+  },
   render: function () {
     return (
       <tr className="companyRow">
@@ -17,7 +20,10 @@ var CompanyListRow = React.createClass({
         <td>{this.props.company.email}</td>
         <td>{this.props.company.phone}</td>
         <td>{this.props.company.owners.join(", ")}</td>
-        <td><button className="btn btn-primary btn-sm" onClick={this.handleEditButtonClick}>Edit</button> </td>
+        <td>
+          <button className="btn btn-primary btn-sm" onClick={this.handleEditButtonClick}>Edit</button>
+          <button className="btn btn-default btn-sm btn-rightOf-inline" onClick={this.handleAddOwnersButtonClick}>Add Owners</button>
+        </td>
       </tr>
     );
   }
@@ -30,7 +36,8 @@ var CompanyList = React.createClass({
     for (i = 0; i < this.props.companies.length; i++) {
       companyNodes.push(
         <CompanyListRow company={this.props.companies[i]}
-                        onCompanyEditButtonClick={this.props.onCompanyEditRequested} />
+                        onCompanyEditButtonClick={this.props.onCompanyEditRequested}
+                        onAddOwnersButtonClick={this.props.onAddOwnersRequested} />
       );
     }
 
@@ -86,32 +93,17 @@ var FormGroup = React.createClass({
   }
 });
 
-var CompanyForm = React.createClass({
+var OwnersForm = React.createClass({
   getInitialState: function () {
     return {
       showModal: true,
       errors: {
-        name: '',
-        address: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
         owners: ''
       },
       values: {
-        name: '',
-        address: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
         owners: ''
       }
     };
-  },
-  componentDidMount: function() {
-    this.fetchCompany(this.props.url);
   },
   parseOwners: function (ownersString) {
     if (ownersString) {
@@ -120,42 +112,17 @@ var CompanyForm = React.createClass({
       return null;
     }
   },
-  fetchCompany: function (url) {
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({ values: data });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
   handleSubmit: function(e) {
-    var url = '/companies', method = 'POST';
     e.preventDefault();
 
-    if (this.props.url) {
-      url = this.props.url;
-      method = 'PUT';
-    }
-
     $.ajax({
-      url: url,
-      method: method,
+      url: this.props.url + '/owners',
+      method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({
-        name: this.state.values.name,
-        address: this.state.values.address,
-        city: this.state.values.city,
-        country: this.state.values.country,
-        email: this.state.values.email,
-        phone: this.state.values.phone,
         owners: this.parseOwners(this.state.values.owners)
       }),
-      success: function(data) {
+      success: function() {
         this.setState(this.getInitialState());
         this.close();
       }.bind(this),
@@ -199,6 +166,135 @@ var CompanyForm = React.createClass({
   },
   render: function() {
     return (
+      <Modal show={this.state.showModal} onHide={this.close}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add new owners</Modal.Title>
+        </Modal.Header>
+        <form name="ownersForm" role="form" onSubmit={this.handleSubmit}>
+          <Modal.Body>
+            <FormGroup name="owners" label="Owners (*)" hint="Enter owner(s) separated by comma"
+                       value={this.state.values.owners} error={this.state.errors.owners}
+                       onInputChange={this.handleInputChange('owners')} />
+            <span>(*) Required field</span>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Close</Button>
+            <input type="submit" className="btn btn-primary" value="Save" />
+          </Modal.Footer>
+        </form>
+      </Modal>
+
+    );
+  }
+});
+
+var CompanyForm = React.createClass({
+  getInitialState: function () {
+    return {
+      showModal: true,
+      errors: {
+        name: '',
+        address: '',
+        city: '',
+        country: '',
+        email: '',
+        phone: '',
+        owners: ''
+      },
+      values: {
+        name: '',
+        address: '',
+        city: '',
+        country: '',
+        email: '',
+        phone: '',
+        owners: ''
+      }
+    };
+  },
+  componentDidMount: function() {
+    this.fetchCompany(this.props.url);
+  },
+  parseOwnersString: function (ownersString) {
+    return ownersString ? ownersString.replace(/,\s+/g, ',').split(',') : null;
+  },
+  fetchCompany: function (url) {
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        var values = update(data, { owners: { $set: data.owners.join(', ') } });
+        this.setState({ values: values });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleSubmit: function(e) {
+    var url = '/companies', method = 'POST';
+    e.preventDefault();
+
+    if (this.props.url) {
+      url = this.props.url;
+      method = 'PUT';
+    }
+
+    $.ajax({
+      url: url,
+      method: method,
+      contentType: 'application/json',
+      data: JSON.stringify({
+        name: this.state.values.name,
+        address: this.state.values.address,
+        city: this.state.values.city,
+        country: this.state.values.country,
+        email: this.state.values.email,
+        phone: this.state.values.phone,
+        owners: this.parseOwnersString(this.state.values.owners)
+      }),
+      success: function(data) {
+        this.setState(this.getInitialState());
+        this.close();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (xhr.status === 400) {
+          if (xhr.responseJSON.errors) {
+            this.handleErrors(xhr.responseJSON.errors);
+          }
+        }
+      }.bind(this)
+    });
+  },
+  handleErrors: function(errors) {
+    var i;
+    var stateErrors = {};
+    for (i = 0; i < errors.length; i++) {
+      stateErrors[errors[i].field] = errors[i].code;
+    }
+    this.setState({ errors: update(this.state.errors, { $merge: stateErrors })});
+  },
+  close: function() {
+    this.setState({ showModal: false });
+    this.props.onFinished();
+  },
+  open: function() {
+    this.setState({ showModal: true });
+  },
+  handleInputChange: function(e) {
+    var errors = {};
+    var values = {};
+    console.log(e.target.name + ': ' + e.target.value);
+    values[e.target.name] = e.target.value;
+    errors[e.target.name] = '';
+    this.setState({
+      errors: update(this.state.errors, { $merge: errors }),
+      values: update(this.state.values, { $merge: values })
+    });
+  },
+  render: function() {
+    return (
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
             <Modal.Title>Create a company</Modal.Title>
@@ -207,37 +303,37 @@ var CompanyForm = React.createClass({
             <Modal.Body>
               <FormGroup name="name" label="Name (*)" hint="Enter a name" 
                          value={this.state.values.name} error={this.state.errors.name}
-                         onInputChange={this.handleInputChange('name')} />
+                         onInputChange={this.handleInputChange} />
               <FormGroup name="address" label="Address (*)" hint="Enter an address"
                          value={this.state.values.address} error={this.state.errors.address}
-                         onInputChange={this.handleInputChange('address')} />
+                         onInputChange={this.handleInputChange} />
               <div className="row">
                 <div className="col-md-6">
                   <FormGroup name="city" label="City (*)" hint="Enter a city"
                              value={this.state.values.city} error={this.state.errors.city}
-                             onInputChange={this.handleInputChange('city')} />
+                             onInputChange={this.handleInputChange} />
                 </div>
                 <div className="col-md-6">
                   <FormGroup name="country" label="Country (*)" hint="Enter a country"
                              value={this.state.values.country} error={this.state.errors.country}
-                             onInputChange={this.handleInputChange('country')} />
+                             onInputChange={this.handleInputChange} />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6">
                   <FormGroup name="email" label="Email" hint="Enter an email"
                              value={this.state.values.email} error={this.state.errors.email}
-                             onInputChange={this.handleInputChange('email')} />
+                             onInputChange={this.handleInputChange} />
                 </div>
                 <div className="col-md-6">
                   <FormGroup name="phone" label="Phone" hint="Enter a phone"
                              value={this.state.values.phone} error={this.state.errors.phone}
-                             onInputChange={this.handleInputChange('phone')} />
+                             onInputChange={this.handleInputChange} />
                 </div>
               </div>
-              <FormGroup name="owners" label="Owners (*)" hint="Enter a owners"
+              <FormGroup name="owners" label="Owners (*)" hint="Enter owner(s) separated by comma"
                          value={this.state.values.owners} error={this.state.errors.owners}
-                         onInputChange={this.handleInputChange('owners')} />
+                         onInputChange={this.handleInputChange} />
               <span>(*) Required field</span>
             </Modal.Body>
             <Modal.Footer>
@@ -256,7 +352,8 @@ var CompaniesBox = React.createClass({
   getInitialState: function() {
     return {
       showCompanyForm: false,
-      companyIdToEdit: null,
+      showOwnersForm: false,
+      currentCompanyId: null,
       companies: []
     };
   },
@@ -277,32 +374,47 @@ var CompaniesBox = React.createClass({
     this.setState({ showCompanyForm:true });
   },
   handleCompanyFormFinished: function () {
-    this.setState({ showCompanyForm:false, companyIdToEdit: null });
+    this.setState({ showCompanyForm:false, currentCompanyId: null });
+    this.fetchCompanies();
+  },
+  handleOwnersFormFinished: function () {
+    this.setState({ showOwnersForm:false, currentCompanyId: null });
     this.fetchCompanies();
   },
   handleCompanyEditRequested: function (company) {
-    this.setState({ companyIdToEdit: company.id, showCompanyForm: true });
+    this.setState({ showCompanyForm: true, currentCompanyId: company.id });
+  },
+  handleAddOwnersRequested: function (company) {
+    this.setState({ showOwnersForm: true, currentCompanyId: company.id });
   },
   componentDidMount: function() {
     this.fetchCompanies();
   },
   render: function() {
-    var companyForm, resourceUrl;
+    var companyForm, ownersForm, resourceUrl;
+
+    if (this.state.currentCompanyId) {
+      resourceUrl = this.props.url + '/' + this.state.currentCompanyId;
+    }
 
     if (this.state.showCompanyForm) {
-      if (this.state.companyIdToEdit) {
-        resourceUrl = this.props.url + '/' + this.state.companyIdToEdit;
-      }
       companyForm = <CompanyForm url={resourceUrl} onFinished={this.handleCompanyFormFinished}/>
+    }
+
+    if (this.state.showOwnersForm) {
+      ownersForm = <OwnersForm url={resourceUrl} onFinished={this.handleOwnersFormFinished} />
     }
     return (
       <div>
         <div className="global-actions pull-right">
           <button className="btn btn-primary" onClick={this.handleNewCompanyClick}>New Company</button>
         </div>
-        <CompanyList companies={this.state.companies} onCompanyEditRequested={this.handleCompanyEditRequested}/>
+        <CompanyList companies={this.state.companies}
+                     onCompanyEditRequested={this.handleCompanyEditRequested}
+                     onAddOwnersRequested={this.handleAddOwnersRequested} />
 
         {companyForm}
+        {ownersForm}
       </div>
     );
   }

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.eduardods.companies.acceptance.ui.elements.CompanyForm;
 import com.eduardods.companies.acceptance.ui.elements.CompanyListElement.CompanyListRow;
+import com.eduardods.companies.acceptance.ui.elements.FormElement;
 import com.eduardods.companies.acceptance.ui.elements.HomePage;
 
 import cucumber.api.java.en.When;
@@ -27,7 +27,7 @@ public class EditCompanySteps {
 
   @When("company form is already pre-filled with this information:")
   public void checkFormIsPreFilled(Map<String, String> companyToEdit) {
-    CompanyForm form = homePage.getCompanyForm().get();
+    FormElement form = homePage.getCompanyForm().get();
     for (Entry<String, String> fieldAndText : companyToEdit.entrySet()) {
       String text = form.get(fieldAndText.getKey()).getText();
 
