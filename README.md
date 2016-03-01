@@ -147,11 +147,17 @@ at once in one machine.
 * UI Bundles
     * To keep simple the example there is no such technique on it, if we want to be production ready we should 
       compress and create bundles for our JS/CSS/HTML files.
+      
+* User feedback
+    * Although in this example I don't provide complete feedback for the user we should add:
+        * Loading items for server interactions
+        * Complete set of general error messages
     
 * Acceptance tests with Selenium and Cucumber was not easy
     * **You need to have Firefox installed in your machine to run the acceptance tests**, I found problems with 
       HtmlUnitDriver :-(
     * I had to write a workaround to be able to clear content of a form
+    * I had to disable the animations to be able to test some scenarios
     * Next time I will try to use other tools for it.
     * API and Web client tests are together in the same gradle configuration, although it shouldn't be 
       hard to extract if needed.
