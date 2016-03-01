@@ -16,8 +16,12 @@ public class FormElement {
   }
 
   public void setFieldText(String name, String text) {
-    clearFieldText(name);
-    rootElement.findElement(By.name(name)).sendKeys(text);
+    if (text.isEmpty()) {
+      clearFieldText(name);
+    } else {
+      rootElement.findElement(By.name(name)).clear();
+      rootElement.findElement(By.name(name)).sendKeys(text);
+    }
   }
 
   private void clearFieldText(String name) {

@@ -10,36 +10,25 @@ Feature: UI - Company list
   @view-list-some
   Scenario: List some companies
     Given No company exists
-    And This company exists
-      """
-      {
-        "name": "My Company 1",
-        "address": "Company St, 1",
-        "city": "New York",
-        "country": "USA",
-        "email": "myemail@mail.com",
-        "phone": "55509876",
-        "owners": [
-          "Mr Owner 1"
-        ]
-      }
-      """
-    And This company exists
-      """
-      {
-        "name": "My Company 2",
-        "address": "Company St, 2",
-        "city": "London",
-        "country": "UK",
-        "email": "myemail2@mail.com",
-        "phone": "44409876",
-        "owners": [
-          "Mr Owner 2",
-          "Mr Owner 3"
-        ]
-      }
-      """
     When User opens the home page
+    And user clicks on New Company button
+    And user fills and submits the company form with this information:
+      | name     | My Company 1           |
+      | address  | Company St, 1          |
+      | city     | New York               |
+      | country  | USA                    |
+      | email    | myemail@mail.com       |
+      | phone    | 55509876               |
+      | owners   | Mr Owner 1             |
+    And user clicks on New Company button
+    And user fills and submits the company form with this information:
+      | name     | My Company 2           |
+      | address  | Company St, 2          |
+      | city     | London                 |
+      | country  | UK                     |
+      | email    | myemail2@mail.com      |
+      | phone    | 44409876               |
+      | owners   | Mr Owner 2, Mr Owner 3 |
     Then the list header with 8 columns is displayed
     And the company list shows this information
       | name         | address       | city     | country | email             | phone    | owners                 |

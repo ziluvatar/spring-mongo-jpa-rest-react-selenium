@@ -2,21 +2,16 @@ Feature: Edit a company
 
   Background:
     Given No company exists
-    Given This company exists
-      """
-      {
-        "name": "My Company 1",
-        "address": "Company St, 1",
-        "city": "New York",
-        "country": "USA",
-        "email": "myemail@mail.com",
-        "phone": "55509876",
-        "owners": [
-          "Mr Owner 1"
-        ]
-      }
-      """
-    And User opens the home page
+    When User opens the home page
+    And user clicks on New Company button
+    And user fills and submits the company form with this information:
+      | name     | My Company 1           |
+      | address  | Company St, 1          |
+      | city     | New York               |
+      | country  | USA                    |
+      | email    | myemail@mail.com       |
+      | phone    | 55509876               |
+      | owners   | Mr Owner 1             |
 
   @view-edit @view-show-edit-form
   Scenario: Form to edit company is shown with information
