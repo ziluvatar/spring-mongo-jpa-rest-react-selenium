@@ -36,7 +36,8 @@ public class CompanyController {
 
   @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public void post(@RequestBody @Valid CompanyRequest companyRequest, UriComponentsBuilder uriBuilder, HttpServletResponse response) {
+  public void post(@RequestBody @Valid CompanyRequest companyRequest,
+                   UriComponentsBuilder uriBuilder, HttpServletResponse response) {
     String id = companiesRepository.save(toCompany(companyRequest));
 
     response.setHeader(HttpHeaders.LOCATION, uriBuilder.pathSegment(RESOURCE, id).build().getPath());
@@ -73,7 +74,8 @@ public class CompanyController {
   }
 
   @RequestMapping(method = RequestMethod.PUT, path = "/{companyId}", consumes = "application/json")
-  public ResponseEntity<Void> put(@PathVariable String companyId, @RequestBody @Valid CompanyRequest companyRequest) {
+  public ResponseEntity<Void> put(@PathVariable String companyId,
+                                  @RequestBody @Valid CompanyRequest companyRequest) {
     if (companyExists(companyId)) {
       saveCompany(companyId, companyRequest);
       return new ResponseEntity<>(HttpStatus.OK);
@@ -93,8 +95,10 @@ public class CompanyController {
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/{companyId}/owners", consumes = "application/json")
-  public ResponseEntity<Void> postOwner(@PathVariable String companyId, @RequestBody @Valid OwnersRequest ownersRequest) {
+  public ResponseEntity<Void> postOwner(@PathVariable String companyId,
+                                        @RequestBody @Valid OwnersRequest ownersRequest) {
     Optional<Company> storedCompanyOptional = companiesRepository.findOne(companyId);
+
     if (storedCompanyOptional.isPresent()) {
       addOwners(ownersRequest, storedCompanyOptional.get());
       return new ResponseEntity<>(HttpStatus.OK);
