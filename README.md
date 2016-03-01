@@ -147,6 +147,7 @@ at once in one machine.
 * UI Bundles
     * To keep simple the example there is no such technique on it, if we want to be production ready we should 
       compress and create bundles for our JS/CSS/HTML files.
+    * With React we should compile the JSX code on build time, to avoid the user to do it on the fly.  
       
 * User feedback
     * Although in this example I don't provide complete feedback for the user we should add:
