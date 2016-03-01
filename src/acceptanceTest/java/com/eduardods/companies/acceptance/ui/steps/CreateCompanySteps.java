@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import com.eduardods.companies.acceptance.ui.elements.CompanyForm;
 import com.eduardods.companies.acceptance.ui.elements.HomePage;
@@ -32,12 +33,22 @@ public class CreateCompanySteps {
   }
 
   @When("company form is filled and submitted with this information:")
-  public void fillCompanyForm(Map<String, String> company){
-    checkCompanyFormIsDisplayed();
+  public void fillCompanyForm(Map<String, String> newCompany){
     CompanyForm form = homePage.getCompanyForm().get();
-    for (Entry<String, String> entry : company.entrySet()) {
-      form.set(entry.getKey(), entry.getValue());
+    for (Entry<String, String> dataToInput : newCompany.entrySet()) {
+      form.setFieldText(dataToInput.getKey(), dataToInput.getValue());
     }
     form.submit();
+  }
+
+  @Then("company form shows these errors for these fields:")
+  public void checkFieldErrors(Map<String, String> failedCompany) {
+    CompanyForm form = homePage.getCompanyForm().get();
+    for (Entry<String, String> fieldAndError : failedCompany.entrySet()) {
+      Optional<String> errorOptional = form.get(fieldAndError.getKey()).getErrorMessage();
+
+      assertThat(errorOptional.isPresent(), is(true));
+      assertThat(errorOptional.get(), is(fieldAndError.getValue()));
+    }
   }
 }

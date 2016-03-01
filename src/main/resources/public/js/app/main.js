@@ -50,13 +50,14 @@ var FormGroup = React.createClass({
   },
   render: function(){
     var errorMessage, groupErrorClass;
+    var formGroupClass = 'form-group-' + this.props.name;
 
     if (this.props.error) {
-      errorMessage = <span className="help-block">{this.getErrorMessage(this.props.error)}</span>;
+      errorMessage = <span className="help-block error-message">{this.getErrorMessage(this.props.error)}</span>;
       groupErrorClass = 'has-error';
     }
     return (
-      <div className={'form-group ' + groupErrorClass}>
+      <div className={ formGroupClass + ' form-group ' + groupErrorClass}>
         <label htmlFor={'companyForm' + this.props.name} className="control-label">{this.props.label}</label>
         <input type="text" className="form-control" id={'companyForm' + this.props.name} name={this.props.name}
                placeholder={this.props.hint} value={this.props.value} onChange={this.props.onInputChange} />
@@ -188,12 +189,12 @@ var CompanyForm = React.createClass({
                              onInputChange={this.handleInputChange('email')} />
                 </div>
                 <div className="col-md-6">
-                  <FormGroup name="phone" label="Phone" hint="Enter an phone"
+                  <FormGroup name="phone" label="Phone" hint="Enter a phone"
                              value={this.state.values.phone} error={this.state.errors.phone}
                              onInputChange={this.handleInputChange('phone')} />
                 </div>
               </div>
-              <FormGroup name="owners" label="Owners (*)" hint="Enter an owners"
+              <FormGroup name="owners" label="Owners (*)" hint="Enter a owners"
                          value={this.state.values.owners} error={this.state.errors.owners}
                          onInputChange={this.handleInputChange('owners')} />
               <span>(*) Required field</span>

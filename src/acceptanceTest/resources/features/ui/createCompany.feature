@@ -25,3 +25,24 @@ Feature: Create a company
       | My Company 1 | Company St, 1 | New York | USA     | myemail@mail.com  | 55509876 | Mr Owner 1, Mr Owner 2 |
     And the company form is not displayed
 
+  @view-create-company-invalid-fields
+  Scenario: Create a new company with all fields
+    When user clicks on New Company button
+    And company form is filled and submitted with this information:
+      | name     ||
+      | address  ||
+      | city     ||
+      | country  ||
+      | email    | aaa |
+      | phone    ||
+      | owners   ||
+    Then company form shows these errors for these fields:
+      | name     | This field can not be empty |
+      | address  | This field can not be empty |
+      | city     | This field can not be empty |
+      | country  | This field can not be empty |
+      | email    | The email format is invalid |
+      | owners   | This field can not be empty |
+    And the company form is displayed
+
+
