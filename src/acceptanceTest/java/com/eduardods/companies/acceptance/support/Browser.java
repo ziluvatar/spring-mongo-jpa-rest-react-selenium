@@ -20,7 +20,8 @@ public class Browser {
   }
 
   private WebDriver createFirefoxWebDriver() {
-    return new FirefoxDriver(new FirefoxProfile());
+    FirefoxDriver driver = new FirefoxDriver(new FirefoxProfile());
+    return driver;
   }
 
   private WebDriver createHtmlUnitDriver() {

@@ -24,7 +24,7 @@ Feature: UI - Add owners to a company
     And add owners form is empty
 
   @view-add-owners @view-edit-owners
-  Scenario: Edit owners of a company
+  Scenario: Add owners to a company
     When user clicks on Add Owners Button in row 1 button
     And user enter these owners: 'Mr Owner 3, Mr Owner 4'
     Then the company list shows this information
