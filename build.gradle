@@ -49,6 +49,10 @@ task acceptanceTest(type: Test) {
 	testLogging.showStandardStreams = true
 }
 
+bootRun {
+	systemProperties = System.properties
+}
+
 //For heroku
 task stage {
 	dependsOn build
