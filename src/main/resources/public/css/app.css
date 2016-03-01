@@ -1,3 +1,8 @@
 .global-actions {
   padding: 15px;
 }
+
+table .btn{
+  padding: 2px 7px;
+  font-size: 80%;
+}

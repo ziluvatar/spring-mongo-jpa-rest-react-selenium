@@ -15,6 +15,7 @@ public class CompanyForm {
   }
 
   public void setFieldText(String name, String text) {
+    rootElement.findElement(By.name(name)).clear();
     rootElement.findElement(By.name(name)).sendKeys(text);
   }
 
@@ -34,8 +35,8 @@ public class CompanyForm {
       this.rootElement = rootElement;
     }
 
-    public String getValue() {
-      return rootElement.findElement(By.tagName("input")).getText();
+    public String getText() {
+      return rootElement.findElement(By.tagName("input")).getAttribute("value");
     }
 
     public Optional<String> getErrorMessage() {

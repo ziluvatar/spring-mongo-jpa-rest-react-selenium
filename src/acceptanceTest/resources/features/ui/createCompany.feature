@@ -12,7 +12,7 @@ Feature: Create a company
   @view-create-company
   Scenario: Create a new company with all fields
     When user clicks on New Company button
-    And company form is filled and submitted with this information:
+    And user fills and submits the company form with this information:
       | name     | My Company 1           |
       | address  | Company St, 1          |
       | city     | New York               |
@@ -26,9 +26,9 @@ Feature: Create a company
     And the company form is not displayed
 
   @view-create-company-invalid-fields
-  Scenario: Create a new company with all fields
+  Scenario: Try to create a new company with invalid fields
     When user clicks on New Company button
-    And company form is filled and submitted with this information:
+    And user fills and submits the company form with this information:
       | name     ||
       | address  ||
       | city     ||

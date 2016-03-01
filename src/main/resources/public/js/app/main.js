@@ -3,36 +3,55 @@ var Button = ReactBootstrap.Button;
 var ButtonInput = ReactBootstrap.ButtonInput;
 var update = React.addons.update;
 
+var CompanyListRow = React.createClass({
+  handleEditButtonClick: function () {
+    this.props.onCompanyEditButtonClick(this.props.company);
+  },
+  render: function () {
+    return (
+      <tr className="companyRow">
+        <td>{this.props.company.name}</td>
+        <td>{this.props.company.address}</td>
+        <td>{this.props.company.city}</td>
+        <td>{this.props.company.country}</td>
+        <td>{this.props.company.email}</td>
+        <td>{this.props.company.phone}</td>
+        <td>{this.props.company.owners.join(", ")}</td>
+        <td><button className="btn btn-primary btn-sm" onClick={this.handleEditButtonClick}>Edit</button> </td>
+      </tr>
+    );
+  }
+});
 var CompanyList = React.createClass({
   render: function() {
-    var companyNodes = this.props.companies.map(function(company) {
-      return (
-        <tr className="companyRow">
-          <td>{company.name}</td>
-          <td>{company.address}</td>
-          <td>{company.city}</td>
-          <td>{company.country}</td>
-          <td>{company.email}</td>
-          <td>{company.phone}</td>
-          <td>{company.owners.join(", ")}</td>
-        </tr>
+    var i;
+    var companyNodes = [];
+
+    for (i = 0; i < this.props.companies.length; i++) {
+      companyNodes.push(
+        <CompanyListRow company={this.props.companies[i]}
+                        onCompanyEditButtonClick={this.props.onCompanyEditRequested} />
       );
-    });
+    }
 
     return (
       <div className="companyList">
         <table className="table">
-          <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Country</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Owners</th>
-            <th>Actions</th>
-          </tr>
-          {companyNodes}
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>Country</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Owners</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {companyNodes}
+          </tbody>
         </table>
       </div>
     );
@@ -91,6 +110,9 @@ var CompanyForm = React.createClass({
       }
     };
   },
+  componentDidMount: function() {
+    this.fetchCompany(this.props.url);
+  },
   parseOwners: function (ownersString) {
     if (ownersString) {
       return ownersString.replace(/,\s+/g,',').split(',');
@@ -98,12 +120,31 @@ var CompanyForm = React.createClass({
       return null;
     }
   },
+  fetchCompany: function (url) {
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({ values: data });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleSubmit: function(e) {
+    var url = '/companies', method = 'POST';
     e.preventDefault();
 
+    if (this.props.url) {
+      url = this.props.url;
+      method = 'PUT';
+    }
+
     $.ajax({
-      url: "/companies",
-      method: 'POST',
+      url: url,
+      method: method,
       contentType: 'application/json',
       data: JSON.stringify({
         name: this.state.values.name,
@@ -215,6 +256,7 @@ var CompaniesBox = React.createClass({
   getInitialState: function() {
     return {
       showCompanyForm: false,
+      companyIdToEdit: null,
       companies: []
     };
   },
@@ -235,24 +277,30 @@ var CompaniesBox = React.createClass({
     this.setState({ showCompanyForm:true });
   },
   handleCompanyFormFinished: function () {
-    this.setState({ showCompanyForm:false });
+    this.setState({ showCompanyForm:false, companyIdToEdit: null });
     this.fetchCompanies();
+  },
+  handleCompanyEditRequested: function (company) {
+    this.setState({ companyIdToEdit: company.id, showCompanyForm: true });
   },
   componentDidMount: function() {
     this.fetchCompanies();
   },
   render: function() {
-    var companyForm;
+    var companyForm, resourceUrl;
 
     if (this.state.showCompanyForm) {
-      companyForm = <CompanyForm onFinished={this.handleCompanyFormFinished}/>
+      if (this.state.companyIdToEdit) {
+        resourceUrl = this.props.url + '/' + this.state.companyIdToEdit;
+      }
+      companyForm = <CompanyForm url={resourceUrl} onFinished={this.handleCompanyFormFinished}/>
     }
     return (
       <div>
         <div className="global-actions pull-right">
           <button className="btn btn-primary" onClick={this.handleNewCompanyClick}>New Company</button>
         </div>
-        <CompanyList companies={this.state.companies} />
+        <CompanyList companies={this.state.companies} onCompanyEditRequested={this.handleCompanyEditRequested}/>
 
         {companyForm}
       </div>

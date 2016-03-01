@@ -32,7 +32,7 @@ public class CreateCompanySteps {
     assertThat(homePage.getCompanyForm().isPresent(), is(false));
   }
 
-  @When("company form is filled and submitted with this information:")
+  @When("user (?:fills|modifies) and submits the company form with this information:")
   public void fillCompanyForm(Map<String, String> newCompany){
     CompanyForm form = homePage.getCompanyForm().get();
     for (Entry<String, String> dataToInput : newCompany.entrySet()) {

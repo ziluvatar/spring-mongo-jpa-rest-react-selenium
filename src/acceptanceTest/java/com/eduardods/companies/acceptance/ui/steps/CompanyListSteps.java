@@ -8,8 +8,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-
+import com.eduardods.companies.acceptance.ui.elements.CompanyListElement.CompanyListRow;
 import com.eduardods.companies.acceptance.ui.elements.HomePage;
 
 import cucumber.api.DataTable;
@@ -40,8 +39,8 @@ public class CompanyListSteps {
   public void checkListItems(DataTable expectedTable) {
     List<List<String>> expectedCompanies = expectedTable.cells(1);
 
-    List<List<WebElement>> actualTable = homePage.getCompanyList().getRows();
-    List<List<String>> actualCompanies = map(actualTable, (rowCells) -> map(rowCells, WebElement::getText));
+    List<CompanyListRow> actualTable = homePage.getCompanyList().getRows();
+    List<List<String>> actualCompanies = map(actualTable, CompanyListRow::getDataCells);
 
     assertThat(actualCompanies, equalTo(expectedCompanies));
   }
